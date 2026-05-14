@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 import { ArrowRight, CalendarDays, Mail, MapPin, Phone, UserRound } from "lucide-react";
 
@@ -9,6 +10,7 @@ type OrderFormState = {
   location: string;
   date: string;
   details: string;
+  consent: boolean;
 };
 
 const initialState: OrderFormState = {
@@ -17,6 +19,7 @@ const initialState: OrderFormState = {
   location: "",
   date: "",
   details: "",
+  consent: false,
 };
 
 export function OrderForm() {
@@ -45,6 +48,7 @@ export function OrderForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!form.consent) return;
     setSubmitted(true);
     window.location.href = mailtoHref;
   }
@@ -130,7 +134,23 @@ export function OrderForm() {
         Uveďte prosím aj približnú vzdialenosť v metroch, na akú dlhú vzdialenosť bude potrebné betón čerpať.
       </p>
 
-      <button type="submit" className="submit-button">
+      <label className="consent-field">
+        <input
+          type="checkbox"
+          checked={form.consent}
+          onChange={(event) => updateField("consent", event.target.checked)}
+          required
+        />
+        <span>
+          Súhlasím so spracovaním osobných údajov v zmysle{" "}
+          <Link href="/ochrana-osobnych-udajov" target="_blank" rel="noreferrer">
+            Ochrany osobných údajov
+          </Link>
+          .
+        </span>
+      </label>
+
+      <button type="submit" className="submit-button" disabled={!form.consent}>
         Odoslať objednávku
         <ArrowRight aria-hidden="true" size={19} />
       </button>

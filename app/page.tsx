@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   Building2,
   Camera,
@@ -13,13 +14,10 @@ import {
   Truck,
 } from "lucide-react";
 import { OrderForm } from "@/components/OrderForm";
-
-const navItems = [
-  { href: "#sluzby", label: "Služby" },
-  { href: "#technika", label: "Technika" },
-  { href: "#realizacie", label: "Realizácie" },
-  { href: "#kontakt", label: "Kontakt" },
-];
+import { FloatingOrderButton } from "@/components/FloatingOrderButton";
+import { CookieBanner, CookieSettingsLink } from "@/components/CookieBanner";
+import { Lightbox } from "@/components/Lightbox";
+import { SiteHeader, SiteHero } from "@/components/SiteHeader";
 
 const serviceItems = [
   "Čerpanie betónu na stavbách, dvoroch aj v horšie dostupnom teréne.",
@@ -36,49 +34,48 @@ const specs = [
   { label: "Zásobník", value: "300 / 360 l", icon: Hammer },
 ];
 
-const gallerySlots = Array.from({ length: 16 }, (_, index) => index + 1);
+const galleryPhotos = [
+  "11037455-dfef-4045-84b9-78712751e445.jpg",
+  "57199202-cd62-4473-8ab8-e9614e4c539f.jpg",
+  "580906d5-c7b1-43f5-8ca9-fcfb7e49eee9.jpg",
+  "597f1394-b1cb-4299-b97e-14f106be50ea.jpg",
+  "82bbeb89-a9b9-43e8-ba6d-50c83580b1cc.jpg",
+  "ccf65d99-ae11-4629-8e0c-d0fb5eb59e1c.jpg",
+  "e430e507-3449-4b50-bfbb-2543ead8a67e.jpg",
+];
 
 export default function Home() {
   return (
     <main>
-      <header className="site-header" aria-label="Hlavná navigácia">
-        <a href="#top" className="header-logo" aria-label="Betonax úvod">
-          <Image src="/betonax-logo.png" alt="Betonax" width={750} height={123} priority />
-        </a>
-        <nav>
-          {navItems.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-      </header>
-
-      <section className="hero-section" id="top">
-        <Image
-          src="/betonax-banner.png"
-          alt="Betonax čerpanie betónu so stacionárnym čerpadlom Putzmeister P 730"
-          width={3544}
-          height={886}
-          className="hero-image"
-          priority
-          sizes="100vw"
-        />
-      </section>
+      <SiteHeader />
+      <SiteHero />
 
       <section className="intro-band" id="sluzby">
-        <div className="section-shell intro-grid">
-          <div>
+        <div className="section-shell intro-stack">
+          <div className="intro-heading">
             <p className="section-kicker">Čo ponúkame</p>
-            <h2>Betón dostaneme presne tam, kde ho stavba potrebuje</h2>
+            <h2>
+              Betonax zabezpečuje výkonné a spoľahlivé čerpanie betónu pre stavby, kde rozhoduje presnosť a čas.
+            </h2>
           </div>
-          <div className="service-list">
-            {serviceItems.map((item) => (
-              <div key={item} className="service-row">
-                <CheckCircle2 aria-hidden="true" size={22} />
-                <p>{item}</p>
-              </div>
-            ))}
+          <div className="intro-split">
+            <div className="service-cards">
+              {serviceItems.map((item) => (
+                <div key={item} className="service-card">
+                  <CheckCircle2 aria-hidden="true" size={26} />
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+            <div className="intro-photo">
+              <Image
+                src={`/realizacie/${galleryPhotos[3]}`}
+                alt="Realizácia Betonax"
+                width={1200}
+                height={1500}
+                sizes="(max-width: 980px) 100vw, 50vw"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -129,23 +126,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="photo-grid" aria-label="Prázdna mriežka pre fotografie realizácií">
-            {gallerySlots.map((slot) => (
-              <div className="photo-slot" key={slot} aria-label={`Miesto pre fotografiu ${slot}`} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="partner-band">
-        <div className="section-shell partner-grid">
-          <div>
-            <p className="section-kicker">Partner</p>
-            <h2>MS Rental Services</h2>
-          </div>
-          <div className="partner-logo-card">
-            <Image src="/msrental.png" alt="MS Rental Services" width={300} height={72} />
-          </div>
+          <Lightbox photos={galleryPhotos} basePath="/realizacie" alt="Realizácia Betonax" />
         </div>
       </section>
 
@@ -177,11 +158,41 @@ export default function Home() {
                 @beton_ax
               </a>
             </div>
+
+            <div className="contact-partner">
+              <span className="contact-partner-label">BETONAX by</span>
+              <Image
+                src="/msrental.png"
+                alt="MS Rental Services"
+                width={300}
+                height={72}
+                className="contact-partner-logo"
+              />
+            </div>
           </div>
 
           <OrderForm />
         </div>
       </section>
+
+      <footer className="site-footer">
+        <div className="section-shell footer-row">
+          <p className="footer-copy">© 2026 MS Rental Services, s.r.o.</p>
+          <div className="footer-links">
+            <Link href="/ochrana-osobnych-udajov">Ochrana osobných údajov</Link>
+            <CookieSettingsLink>Cookies</CookieSettingsLink>
+          </div>
+          <p className="footer-author">
+            Tvorba webu{" "}
+            <a href="https://aebdigital.sk" target="_blank" rel="noreferrer">
+              AEB Digital sk
+            </a>
+          </p>
+        </div>
+      </footer>
+
+      <FloatingOrderButton />
+      <CookieBanner />
     </main>
   );
 }
